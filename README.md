@@ -15,7 +15,7 @@ El objetivo del proyecto es:
 ## ✅ Estado Actual
 
 - Implementación base en **Python**.
-- Simulación central de IDLA con posibilidad de branching.
+- Simulación central de Random walk con posibilidad de branching.
 
 
 Este readme fue creado con inteligencia artificiel
