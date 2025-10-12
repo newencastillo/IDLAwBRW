@@ -13,30 +13,36 @@ ax.axhline(0, color='gray', lw=1)
 ax.axvline(0, color='gray', lw=1)
 
 # Datos iniciales
-newen = BRW.BRW(p = 0.5)
-newen.crear_particula()
+newen = BRW.BRW_IDLA(p = 0.5)
 newen.crear_particula()
 
 N = 100
-for _ in range(5):
-    newen.actualizar()
+cluster = ax.scatter(newen.mapa[:, 0], newen.mapa[:,1], s=20, color='red')
 
-print(newen.particulas)
+scat = ax.scatter(newen.particulas[:, 0], newen.particulas[:, 1], s=20, color='black', alpha=0.3)
 
-scat = ax.scatter(newen.particulas[:][0], newen.particulas[:][1], s=20, color='black', alpha=0.3)
 
 
 # Función que actualiza el gráfico en cada frame
-def update(frame):
+def update(frame): # falta trabajar bastante esta parte
+    # TO DOS: 
+    # parar simulacion (caso sub critico) (averiguar intervencion del usuario para recontinuar(?))
+    # simulacion GRANDE
+    # ver cuna
     global newen
     # Movimiento aleatorio pequeño
-    newen.actualizar()
+    for _ in range(N):
+        if len(newen.particulas) == 0:
+            return cluster, scat
+        newen.actualizar()
     x, y = zip(*newen.particulas)
+    cluster.set_offsets(np.c_[newen.mapa[:,0], newen.mapa[:,1]])
     scat.set_offsets(np.c_[x, y])
-    return scat,
+
+    return cluster, scat
 
 # Crear la animación
-ani = FuncAnimation(fig, update, frames=200, interval=30, blit=True)
+ani = FuncAnimation(fig, update, frames=600, interval=30, blit=True)
 
 plt.show()
 
