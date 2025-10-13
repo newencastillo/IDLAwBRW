@@ -1,0 +1,45 @@
+# Archivos de cache de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.pytest_cache/
+.coverage
+
+# Entornos virtuales
+venv/
+env/
+ENV/
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de log
+*.log
+
+# Archivos de base de datos (si usas alguna)
+*.db
+*.sqlite3
+
+# Archivos de configuración local
+config_local.py
+settings_local.py
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Archivos de datos grandes o sensibles
+*.csv
+*.xlsx
+*.json
+data/

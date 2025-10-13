@@ -13,10 +13,10 @@ ax.axhline(0, color='gray', lw=1)
 ax.axvline(0, color='gray', lw=1)
 
 # Datos iniciales
-newen = BRW.BRW_IDLA(p = 0.5)
+newen = BRW.BRW_IDLA(p = 0.4)
 newen.crear_particula()
 
-N = 100
+N = 2
 cluster = ax.scatter(newen.mapa[:, 0], newen.mapa[:,1], s=20, color='red')
 
 scat = ax.scatter(newen.particulas[:, 0], newen.particulas[:, 1], s=20, color='black', alpha=0.3)
@@ -42,9 +42,12 @@ def update(frame): # falta trabajar bastante esta parte
     return cluster, scat
 
 # Crear la animación
-ani = FuncAnimation(fig, update, frames=600, interval=30, blit=True)
+ani = FuncAnimation(fig, update, frames=1000, interval=1, blit=True)
 
 plt.show()
+
+
+
 
 
 
