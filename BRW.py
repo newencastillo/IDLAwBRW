@@ -19,6 +19,12 @@ class BRW:
     #def lista(self):
    #     return self.particulas.copy()
 
+    @property  
+    def vacio(self):
+        ''' Retorna verdadero si no quedan partículas haciendo RW'''
+        return len(self.particulas) == 0
+    
+
     def crear_particula(self, x: int = 0, y: int = 0):
        self._particulas.append([x, y])
 
@@ -71,6 +77,11 @@ class BRW_IDLA:
     @mapa.setter
     def mapa(self, value):
         self._mapa = value
+
+    @property  # FALTA IMPLEMENTAR EN LA CLASE PADRE
+    def vacio(self):
+        ''' Retorna verdadero si no quedan partículas haciendo RW'''
+        return len(self.particulas) == 0
 
     
     @property

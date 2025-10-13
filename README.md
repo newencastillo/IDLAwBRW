@@ -14,8 +14,27 @@ El objetivo del proyecto es:
 
 ## ✅ Estado Actual
 
+### Primeros Resultados
+
+A continuación se presenta una pequeña tabla-registro de la cantidad de particulas necesarias para alcanzar un estado "supercritico" aproximado (cuando la población de partículas se sostiene a si misma), junto con la "probabilidad de apareamiento" para algunas simulaciones realizadas.
+
+
+| N | p |
+|---|---|
+| 19  | 0.90|
+| 23  | 0.90|
+| 14  | 0.85  |
+| 12   | 0.85|
+| 14   | 0.85|
+| 9  | 0.80|
+| 9  | 0.80|
+| 5 | 0.80|
+
+
 - Implementación base en **Python**.
 - Simulación central de Random walk con posibilidad de branching.
+- Clase de BRW con restricción de IDLA
+- Simulación con animación
 
 
 Este readme fue creado con inteligencia artificiel
