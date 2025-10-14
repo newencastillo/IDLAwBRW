@@ -7,7 +7,7 @@ import numpy as np
 class BRW:
     def __init__(self, p = 0.8):
         self._particulas = []
-        self.p = p
+        self.p = p # probabilidad de mover una particula
 
     @property
     def particulas(self):

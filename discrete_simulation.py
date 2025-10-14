@@ -36,6 +36,7 @@ for i in range(r_inicial-1): # por el pi...
 newen.crear_particula()
 
 N = 100 # NADIE SABE PARA QUE ES ESTE N
+
 cluster = ax.scatter(newen.mapa[:, 0], newen.mapa[:,1], s=20, color='red')
 
 scat = ax.scatter(newen.particulas[:, 0], newen.particulas[:, 1], s=20, color='black', alpha=0.3)
@@ -71,8 +72,10 @@ def update(frame): # falta trabajar bastante esta parte
 # Crear la animación
 ani = FuncAnimation(fig, update, interval=1, blit=True)
 
-
 plt.show()
+
+
+
 
 
 
