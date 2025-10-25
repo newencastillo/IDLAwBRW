@@ -4,6 +4,11 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import time
 
+# VAARIABLES
+p = 0.4
+lamba = 10
+
+
 # Crear figura y ejes
 fig, ax = plt.subplots(figsize=(5, 5))
 ax.set_xlim(-10, 10)
@@ -13,11 +18,11 @@ ax.axhline(0, color='gray', lw=1)
 ax.axvline(0, color='gray', lw=1)
 
 # Inicializar proceso
-benja = BRW.BRW_IDLA(p=0.8)
+benja = BRW.BRW_IDLA(p)
 benja.crear_particula()
 
 # Parámetros del proceso de Poisson
-tasa_movimiento = 3.0  # λ - eventos por segundo
+tasa_movimiento = lamba  # λ - eventos por segundo
 
 # Variables para control de tiempo real
 ultimo_tiempo = time.time()

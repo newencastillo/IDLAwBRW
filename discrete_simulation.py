@@ -4,22 +4,26 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
+
+
+
 # SETUP
-r_inicial = 12 # con 6 ya a veces no funca
+r_inicial = 25 # 
 """ Se usa para establecer una cantidad inicial de partículas antes de la animación
 CONTROLARSE: ESTO NO REPRESENTA PARA NADA NINGUN TIPO DE RADIO DEL CLUSTER
 ES LA CANTIDAD DE PARTICULAS CON LAS QUE SE INICIA LA SIMULACION (SE SUELTAN DE A UNA)
 R GRANDE -> SE PUEDE ALCANZAR ESTADO SUPER-CRITICO Y LA ANIMACIÓN NUNCA PARTE"""
 
-p = 0.9
+p = 0.95
+
 """ Probabilidad de aparearse (de no aparearse?)
 igual es como mitosis pero waterer"""
 
 
 # Crear figura y ejes centrados en el origen
 fig, ax = plt.subplots(figsize=(5, 5))
-ax.set_xlim(-10, 10)
-ax.set_ylim(-10, 10)
+ax.set_xlim(-100, 100)
+ax.set_ylim(-100, 100)
 ax.set_aspect('equal', 'box')
 ax.axhline(0, color='gray', lw=1)
 ax.axvline(0, color='gray', lw=1)
@@ -40,6 +44,8 @@ N = 100 # NADIE SABE PARA QUE ES ESTE N
 cluster = ax.scatter(newen.mapa[:, 0], newen.mapa[:,1], s=20, color='red')
 
 scat = ax.scatter(newen.particulas[:, 0], newen.particulas[:, 1], s=20, color='black', alpha=0.3)
+
+texto = ax.text(0.02, 0.98, '', transform=ax.transAxes, verticalalignment='top')
 
 """
 QUE se debe hacer, ? 😭
@@ -66,8 +72,9 @@ def update(frame): # falta trabajar bastante esta parte
     x, y = zip(*newen.particulas)
     cluster.set_offsets(np.c_[newen.mapa[:,0], newen.mapa[:,1]])
     scat.set_offsets(np.c_[x, y])
+    texto.set_text(f'Partículas activas: {len(newen.particulas)}')
 
-    return cluster, scat
+    return cluster, scat, texto
 
 # Crear la animación
 ani = FuncAnimation(fig, update, interval=1, blit=True)
