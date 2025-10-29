@@ -1,238 +1,99 @@
-
-# Que lata trabajar oop en python,
-# pero es lo que hay.
 import random as rd
 import numpy as np
 
-class BRW:
-    def __init__(self, p = 0.8):
+class BaseBRW:
+    def __init__(self, p=0.8):
         self._particulas = []
-        self.p = p # probabilidad de mover una particula
+        self.p = p
 
     @property
     def particulas(self):
         return np.asarray(self._particulas.copy())
+
     @particulas.setter
     def particulas(self, value):
         self._particulas = [list(p) for p in value]
-    
-    #def lista(self):
-   #     return self.particulas.copy()
 
-    @property  
+    @property
     def vacio(self):
-        ''' Retorna verdadero si no quedan partículas haciendo RW'''
-        return len(self.particulas) == 0
-    
+        return len(self._particulas) == 0
 
-    def crear_particula(self, x: int = 0, y: int = 0):
-       self._particulas.append([x, y])
+    def crear_particula(self, x=0, y=0):
+        self._particulas.append([x, y])
 
-    def mover(self): # no hy realmente metodos privados en python pero este deberia serlo
+    def mover(self):
         n = len(self._particulas)
-        # elegir una particula al azar
         i = rd.randint(0, n-1)
-        # elegir una direccion al azar
-        dir = rd.choice([(-1, 0), (1, 0), (0, -1), (0, 1)])
-        # mover la particula   
+        dx, dy = rd.choice([(-1, 0), (1, 0), (0, -1), (0, 1)])
+        self._particulas[i][0] += dx
+        self._particulas[i][1] += dy
 
-        self._particulas[i] = [x+y for x, y in zip(self._particulas[i], dir)]
-   
-
-    def aparear(self):
-        n = len(self.particulas)
-        # escoger particula al azar
+    def aparear(self): # Añadir la capacidad de morir!
+        n = len(self._particulas)
         i = rd.randint(0, n-1)
-        # duplicarla
-        self._particulas.append(self.particulas[i].copy())
+        if rd.random() < self.p: # Nos morimos
+           self._particulas.pop(i) 
+        else:               # else Nos duplicamos
+            self._particulas.append(self._particulas[i].copy())
 
+
+    # TODO IMplementar que mienstras mas particulas hay
+    # más probable es que se aparear()
     def actualizar(self):
-        u = rd.random()
-
-        # aqui hay que cambiar esto por una exponencial segun la cantidad de particulas o algo asi
-        # Para que no se joda se podria intentar mover en cada frame y solo en algunos reproducir
-        # TODO : implementar dentro de mover() y aparear() handling para cuando esta muerta la mañá
-        # para que esta madre empiece a funcionar
+        if self.vacio:
+            raise Exception("Se intenta actualizar un RW vacío") 
         self.mover()
-        if u < self.p:
-        # mover una
-        # aparear una particula
+        # Mover OR aparear es bueno porque 
+        # las particulas se pueden morir con cualquiera de los dos
+        if (not self.vacio) and rd.random() < self.p:
             self.aparear()
 
-    
-## Vamos a crear otra clase copia de la anterior pero que implemente idla
-# no vamos a usar herencia porque es demasiado engorroso en python
-# ojala saber rust
-# ojala pasr esto a julia
 
-class BRW_IDLA:
+class BRW(BaseBRW):
+    """ Branching Random Walk estándar """
+    pass
 
-    def __init__(self, p = 0.8):
-        self._particulas = []
-        self.p = p
-        # Añadimos el conjunto de sitios ocupados uwu donde se puede mover
-        self._mapa = []
-        self._mapa.append([0, 0]) # Empezamos con el origen ocupado
-        
+
+class BRW_IDLA(BaseBRW):
+    """ Branching RW + IDLA """
+    def __init__(self, p=0.8):
+        super().__init__(p)
+        self._mapa = [[0, 0]]  # origen ocupado
 
     @property
     def mapa(self):
-        return np.asarray(self._mapa.copy()) # 
+        return np.asarray(self._mapa.copy())
+
     @mapa.setter
     def mapa(self, value):
-        self._mapa = value
-
-    @property  # FALTA IMPLEMENTAR EN LA CLASE PADRE
-    def vacio(self):
-        ''' Retorna verdadero si no quedan partículas haciendo RW'''
-        return len(self.particulas) == 0
+        self._mapa = [list(v) for v in value]
 
     
-    @property
-    def particulas(self):
-        return np.asarray(self._particulas.copy())
-    @particulas.setter
-    def particulas(self, value):
-        self._particulas = [list(p) for p in value]
-    
-    #def lista(self):
-   #     return self.particulas.copy()
-
-    def crear_particula(self): 
-       ''' Crea una particula en el origen '''
-       self._particulas.append([0, 0])
-
-        
-    def mover(self): 
-        ''' Mueve una particula al azar en una direccion al azar.
-        Si la particula sale del conjunto de sitios ocupados, se elimina
-        y se actualiza el cluster
-        '''
-        # Eleccion aleatoria
+    def mover(self):
         n = len(self._particulas)
-        
         i = rd.randint(0, n-1)
-        dir = rd.choice([(-1, 0), (1, 0), (0, -1), (0, 1)])
+        dx, dy = rd.choice([(-1, 0), (1, 0), (0, -1), (0, 1)])
+        x_new = self._particulas[i][0] + dx
+        y_new = self._particulas[i][1] + dy
 
-        # Mover la particula   
-
-        x_new = self._particulas[i][0] + dir[0] 
-        y_new = self._particulas[i][1] + dir[1]
-
-        # chequeamos si nos salimos
-        if [x_new, y_new] not in self._mapa: 
+        if [x_new, y_new] not in self._mapa:
             self._mapa.append([x_new, y_new])
             self._particulas.pop(i)
-        else: 
-            # si no nos salimos, actualizamos la posicion
+        else:
             self._particulas[i] = [x_new, y_new]
 
 
-    def aparear(self):
-        n = len(self.particulas)
-        # escoger particula al azar
-        i = rd.randint(0, n-1)
-        # duplicarla
-        self._particulas.append(self.particulas[i].copy())
 
-    def actualizar(self):
-        u = rd.random()
-        if u < self.p:
-        # mover una particula
-            self.mover()
-        else:
-        # aparear una particula
-            self.aparear()
-
-
-
-class BRW_IDLA_PERC:
-    ''' Añadimos la percolación a nuestro sistema de Idla con Branching RW
-    atentos a los TODO '''
-
-    def __init__(self, p = 0.8):
-        
-        self._particulas = []
-        self.p = p
-        
-        # IDLA
-        self._mapa = []
-        self._mapa.append([0, 0]) # Empezamos con el origen ocupado
-
-        # PERCOLATION
+class BRW_IDLA_PERC(BRW_IDLA):
+    """ Branching RW + IDLA + Percolación """
+    def __init__(self, p=0.8):
+        super().__init__(p)
         self.perc = []
-        self.crear_perc()
-        
-
-    @property
-    def mapa(self):
-        return np.asarray(self._mapa.copy()) # 
-    @mapa.setter
-    def mapa(self, value):
-        self._mapa = value
-
-    @property  # FALTA IMPLEMENTAR EN LA CLASE PADRE
-    def vacio(self):
-        ''' Retorna verdadero si no quedan partículas haciendo RW'''
-        return len(self.particulas) == 0
-
-    
-    @property
-    def particulas(self):
-        return np.asarray(self._particulas.copy())
-    @particulas.setter
-    def particulas(self, value):
-        self._particulas = [list(p) for p in value]
-    
-    #def lista(self):
-   #     return self.particulas.copy()
-
 
     def crear_perc(self, N, pvert, phor):
-        ''' Crea una percolación válida para el mapa'''
-    def crear_particula(self): 
-       ''' Crea una particula en el origen '''
-       self._particulas.append([0, 0])
+        # TODO: implementar grilla con percolación
+        pass
 
-        
-    # TODO IMPLEMENTAR RESTRICCIÓN DE PERCOLACION
-    def mover(self): 
-        ''' Mueve una particula al azar en una direccion al azar.
-        Si la particula sale del conjunto de sitios ocupados, se elimina
-        y se actualiza el cluster
-        '''
-        # Eleccion aleatoria DE PARTICULA
-        n = len(self._particulas)
-        
-        i = rd.randint(0, n-1)
-        dir = rd.choice([(-1, 0), (1, 0), (0, -1), (0, 1)])
-
-        # Mover la particula   
-
-        x_new = self._particulas[i][0] + dir[0] 
-        y_new = self._particulas[i][1] + dir[1]
-
-        # chequeamos si nos salimos
-        if [x_new, y_new] not in self._mapa: 
-            self._mapa.append([x_new, y_new])
-            self._particulas.pop(i)
-        else: 
-            # si no nos salimos, actualizamos la posicion
-            self._particulas[i] = [x_new, y_new]
-
-
-    def aparear(self):
-        n = len(self.particulas)
-        # escoger particula al azar
-        i = rd.randint(0, n-1)
-        # duplicarla
-        self._particulas.append(self.particulas[i].copy())
-
-    def actualizar(self):
-        u = rd.random()
-        if u < self.p:
-        # mover una particula
-            self.mover()
-        else:
-        # aparear una particula
-            self.aparear()  
+    def mover(self):
+        # TODO: incluir validación contra percolación
+        super().mover()

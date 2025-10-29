@@ -23,9 +23,9 @@ A continuación se presenta una pequeña tabla-registro de la cantidad de partic
 |---|---|
 | 19  | 0.90|
 | 23  | 0.90|
-| 14  | 0.85  |
-| 12   | 0.85|
-| 14   | 0.85|
+| 14  | 0.85|
+| 12  | 0.85|
+| 14  | 0.85|
 | 9  | 0.80|
 | 9  | 0.80|
 | 5 | 0.80|
@@ -36,5 +36,12 @@ A continuación se presenta una pequeña tabla-registro de la cantidad de partic
 - Clase de BRW con restricción de IDLA
 - Simulación con animación
 
+# Parte 2
 
-Este readme fue creado con inteligencia artificiel
+Se implementará una *percolación* sobre la malla de $\mathbb{Z}^2$, esto es, quitar aristas para restringir el movimiento posible de las partículas.
+La idea será eliminar aleatoriamente aristas en un campo finito (suficientemente grande para la simulación), con distintas probabilidades de eliminación para los "movimientos" verticales y los horizontales.
+
+Es de esperar que de esta forma, el "cluster" que se formará asintóticamente será una elipse, y sus parámetros que lo definen estarán relacionados con la elección de las probabilidades para las aristas horizontales y verticales
+
+
+Este readme fue creado (en parte) con inteligencia artificiel

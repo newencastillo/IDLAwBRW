@@ -8,13 +8,13 @@ from matplotlib.animation import FuncAnimation
 
 
 # SETUP
-r_inicial = 25 # 
+r_inicial = 4 # 
 """ Se usa para establecer una cantidad inicial de partículas antes de la animación
 CONTROLARSE: ESTO NO REPRESENTA PARA NADA NINGUN TIPO DE RADIO DEL CLUSTER
 ES LA CANTIDAD DE PARTICULAS CON LAS QUE SE INICIA LA SIMULACION (SE SUELTAN DE A UNA)
 R GRANDE -> SE PUEDE ALCANZAR ESTADO SUPER-CRITICO Y LA ANIMACIÓN NUNCA PARTE"""
 
-p = 0.95
+p = 0.5
 
 """ Probabilidad de aparearse (de no aparearse?)
 igual es como mitosis pero waterer"""
@@ -41,10 +41,9 @@ newen.crear_particula()
 
 N = 100 # NADIE SABE PARA QUE ES ESTE N
 
+# Preparar visual
 cluster = ax.scatter(newen.mapa[:, 0], newen.mapa[:,1], s=20, color='red')
-
 scat = ax.scatter(newen.particulas[:, 0], newen.particulas[:, 1], s=20, color='black', alpha=0.3)
-
 texto = ax.text(0.02, 0.98, '', transform=ax.transAxes, verticalalignment='top')
 
 """
@@ -61,10 +60,10 @@ def update(frame): # falta trabajar bastante esta parte
     global newen
     # Movimiento aleatorio pequeño
     newen.actualizar()
-    if len(newen.particulas) == 0:
+    if newen.vacio:
         # sos un boludo, si mueree la simulacion el siguiente update pide actualizar particulas vacias tenes que hacer un break
         print("⚠️  Evento detectado, simulación pausada.")
-        input("Presiona Enter para continuar...")
+        #input("Presiona Enter para continuar...")
         print("Reanudando...")
         newen.crear_particula()
         return cluster, scat

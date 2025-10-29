@@ -23,9 +23,9 @@ A continuación se presenta una pequeña tabla-registro de la cantidad de partic
 |---|---|
 | 19  | 0.90|
 | 23  | 0.90|
-| 14  | 0.85  |
-| 12   | 0.85|
-| 14   | 0.85|
+| 14  | 0.85|
+| 12  | 0.85|
+| 14  | 0.85|
 | 9  | 0.80|
 | 9  | 0.80|
 | 5 | 0.80|
