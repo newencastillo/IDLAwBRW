@@ -3,23 +3,31 @@ import BRW
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from matplotlib.patches import Ellipse
 
 
 
 
 # SETUP
-r_inicial = 5# NO ES UN RADIO
+r_inicial = 3# NO ES UN RADIO
+
 """ Se usa para establecer una cantidad inicial de partículas antes de la animación
 
 """
-p_hor = 0.2
-p_ver = 0.6
+p_hor = 0.0
+
+p_ver = 0.4
+
 """ Probabilidades de descartar un camino horizontal o vertical en la percolacion"""
 
-p = 0.5
+p = 0.0
+
 """ Probabilidad de aparearse 
 (no nos interesa esta parte en esta generación de momento)
 """
+
+a, b = 1-p_ver, 1-p_hor 
+'''Conjetura sobre como se comporta el crecimiento del cluster como una ellipse,'''
 
 
 # Crear figura y ejes centrados en el origen
@@ -46,9 +54,11 @@ for i in range(r_inicial-1): # por el pi...
 # Creamos una más por motivos de animacion que si no se me rompe la webada de abajo
 newen.crear_particula()
 
-N = 100 # NADIE SABE PARA QUE ES ESTE N
+#N = 100 # NADIE SABE PARA QUE ES ESTE N
 
 # Preparar visual
+ellipse = Ellipse((0, 0), width=2*a, height=2*b, fill=False, color='blue')
+ax.add_patch(ellipse)
 cluster = ax.scatter(newen.mapa[:, 0], newen.mapa[:,1], s=20, color='red')
 scat = ax.scatter(newen.particulas[:, 0], newen.particulas[:, 1], s=20, color='black', alpha=0.3)
 texto = ax.text(0.02, 0.98, '', transform=ax.transAxes, verticalalignment='top')
@@ -71,24 +81,27 @@ def update(frame):
     
     # Tamaño del cluster "|A(n)|"
     N = newen.N
+    # Movemos hasta actualizar el cluster
     while newen.N == N and not newen.vacio:
         newen.actualizar() #ATENCION ESTO SE ROMPE CON P =! DE PYCLE 0
 
     newen.crear_particula()
-    if newen.vacio: # no va a entrsar aqui nunka
 
-        print("⚠️ Evento detectado, simulación pausada.")
-        #input("Presiona Enter para continuar...")
-        print("Reanudando...")
-        newen.crear_particula()
-        return cluster, scat
+    # Calcular tamaño del     
+    scale = (N / a*b*3.14)**0.5
+
+    # Actualizar ovalo
+    ellipse.width = a*scale
+    ellipse.height = b*scale
+
+
 
     x, y = zip(*newen.particulas)
     cluster.set_offsets(np.c_[newen.mapa[:,0], newen.mapa[:,1]])
     scat.set_offsets(np.c_[x, y])
     texto.set_text(f'Tamaño cluster: {N}\nDescarte vertical: {p_ver}\nDescarte horizontal:{p_hor}')
 
-    return cluster, scat, texto
+    return cluster, scat, texto, ellipse
 
 # Crear la animación
 ani = FuncAnimation(fig, update, interval=1, blit=True)
