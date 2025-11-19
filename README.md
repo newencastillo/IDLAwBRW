@@ -4,7 +4,9 @@ Este proyecto implementa un modelo de **Internal Diffusion Limited Aggregation (
 
 ## 🧠 Descripción General
 
-En el modelo clásico de IDLA, partículas parten desde el origen (u otra fuente) y realizan un random walk hasta adherirse a un cluster.  
+$\int_a^b e^{\larrow \lambda \dot{newen}}$
+
+En el modelo clásico de IDLA, partículas parten desde el origen y realizan un random walk hasta adherirse a un cluster. 
 En esta versión extendida, se incorpora *branching*, permitiendo que ciertas partículas generen nuevas caminatas durante su evolución.
 
 El objetivo del proyecto es:
