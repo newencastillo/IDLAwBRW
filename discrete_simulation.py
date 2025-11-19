@@ -8,7 +8,7 @@ from matplotlib.animation import FuncAnimation
 
 
 # SETUP
-r_inicial = 0# 
+r_inicial = 10# 
 """ Se usa para establecer una cantidad inicial de partículas antes de la animación
 CONTROLARSE: ESTO NO REPRESENTA PARA NADA NINGUN TIPO DE RADIO DEL CLUSTER
 ES LA CANTIDAD DE PARTICULAS CON LAS QUE SE INICIA LA SIMULACION (SE SUELTAN DE A UNA)
@@ -30,7 +30,7 @@ ax.axvline(0, color='gray', lw=1)
 
 # Datos iniciales
 newen = BRW.BRW_IDLA_PERC(p)
-newen.crear_perc(1000,0.5,0.0)
+newen.crear_perc(100,0.0,0.0)
 print("Perc generada, inciando r inicial")
 for i in range(r_inicial-1): # por el pi...
 
