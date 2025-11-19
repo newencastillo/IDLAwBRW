@@ -47,7 +47,8 @@ p_ver = pedir_float("Ingresa prob. descarte vertical: ")
 
 pasos = pedir_int("Cuanto debe crecer el cluster por frame: ")
 
-frames = pedir_int("Cantidad total de frames (24fps): ")
+FPS = pedir_int("imágenes por segundo: ")
+frames = pedir_int("Cantidad total de frames : ")
 
 nombre = input("NOMBRE ARCHIVO: ").strip() # nombre se guarda sin espacios?
 
@@ -62,15 +63,17 @@ else:
     a, b = C*(1-p_ver)/( p_ver+ p_hor), C*(1-p_hor)/( p_ver+ p_hor) 
 '''Conjetura sobre como se comporta el crecimiento del cluster como una ellipse,'''
 
+N = min(100,max(20, (3*N_inicial+9)**0.5)).__int__() # N aproximado para ver de que tamaño hacer el dibujo (y la perc)?
+
 # Datos iniciales
 newen = BRW.BRW_IDLA_PERC(p)
-newen.crear_perc(500, p_ver, p_hor)
+newen.crear_perc(N, p_ver, p_hor)
 
 print("Iniciando simulacion inicial!")
 while newen.N < N_inicial:
     # creamos una particula y esperamos a q muera
     if newen.N % 1000 == 0:
-        print(newen.N, "particulas en el cluster") # esto a veces no se imprime
+        print(newen.N, "particulas en el cluster") # esto a veces (cuando hay branchin) no se imprime
     newen.crear_particula()
     while not newen.vacio and newen.N < N_inicial: 
         newen.actualizar()
@@ -81,13 +84,12 @@ while newen.N < N_inicial:
 if newen.vacio:
     newen.crear_particula()
 
-#N = 100 # NADIE SABE PARA QUE ES ESTE N
 
 print("iniciande dibuje")
 # Crear figura y ejes centrados en el origen
 fig, ax = plt.subplots(figsize=(5, 5))
-ax.set_xlim(-100,100)
-ax.set_ylim(-100, 100)
+ax.set_xlim(-N,N)
+ax.set_ylim(-N, N)
 ax.set_aspect('equal', 'box')
 ax.axhline(0, color='gray', lw=1)
 ax.axvline(0, color='gray', lw=1)
@@ -95,14 +97,16 @@ ax.axvline(0, color='gray', lw=1)
 # Preparar visual
 ellipse = Ellipse((0, 0), width=2*a, height=2*b, fill=False, color='indigo')
 ax.add_patch(ellipse)
-cluster = ax.scatter(newen.mapa[:, 0], newen.mapa[:,1], s=20, color='teal')
-scat = ax.scatter(newen.particulas[:, 0], newen.particulas[:, 1], s=20, color='black', alpha=0.3)
-texto = ax.text(0.02, 0.98, '', transform=ax.transAxes, verticalalignment='top')
+scat = ax.scatter(newen.particulas[:, 0], newen.particulas[:, 1], s=20, color='black', alpha=0.3, zorder=2)
+cluster = ax.scatter(newen.mapa[:, 0], newen.mapa[:,1], s=20, color='teal', zorder= 1)
+texto = ax.text(0.02, 0.98, '', transform=ax.transAxes, verticalalignment='top', zorder=10)
 
 """
 QUE se debe hacer, ? 😭
 TODO
  - IMPLEMENTAR VALIDAR PERCOLACION
+ - input colores?
+ - elegir "tipos de dibujo?" se va a implementar un update2() para dibujar la primera parte
 """
 
 # Función que actualiza el gráfico en cada frame
@@ -141,12 +145,41 @@ def update(frame):
 
     return cluster, scat, texto, ellipse
 
+def update2(frame):
+    """ Un frame cada simulació"""
+    global newen # nuestra simulacion
+    
+    # Tamaño del cluster "|A(n)|"
+    # Movemos hasta actualizar el cluster??
+
+    newen.actualizar()
+    if newen.vacio:
+        newen.crear_particula()
+        
+    N = newen.N
+
+    # Calcular tamaño del     
+    scale =  (np.pi/0.69)**0.5 * (N / (np.pi* a*b))**0.5 
+
+
+    # Actualizar ovalo
+    ellipse.width = a*scale
+    ellipse.height = b*scale
+
+
+    x, y = zip(*newen.particulas)
+    cluster.set_offsets(np.c_[newen.mapa[:,0], newen.mapa[:,1]])
+    scat.set_offsets(np.c_[x, y])
+    texto.set_text(f'Tamaño cluster: {N}\n $p$ branch = {p}\n($p_h$,  $p_v$) : ({p_ver}, {p_hor})\nPartículas activas: {len(newen.particulas)}')
+
+    return scat, cluster, texto#, ellipse
+
 # Crear la animación
-ani = FuncAnimation(fig, update, frames, interval=10, blit=True)
+ani = FuncAnimation(fig, update2, frames, interval=10, blit=True)
 plt.show()
 from matplotlib.animation import PillowWriter
 print("guardando animatsion")
-ani.save(f"gifs\{nombre}.gif", writer=PillowWriter(fps=24))
+#ani.save(f"gifs\{nombre}.gif", writer=PillowWriter(fps=FPS))
 print("animatsion gualdada")
 
 
