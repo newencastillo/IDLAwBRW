@@ -10,8 +10,13 @@ from matplotlib.patches import Ellipse
 
 def pedir_float(msg):
     while True:
+        s = input(msg).strip()
+        
+        if s == "":
+            return 0
+        
         try:
-            x = float(input(msg))
+            x = float(s)
             if x < 0 or x > 1:
                 raise ValueError("Input debe estar entre 0 y 1")
             return x
@@ -40,9 +45,14 @@ p_ver = pedir_float("Ingresa prob. descarte vertical: ")
 
 """ Probabilidades de descartar un camino horizontal o vertical en la percolacion"""
 
-#a, b =  (1-p_ver), (1-p_hor)
+pasos = pedir_int("Cuanto debe crecer el cluster por frame: ")
+
+frames = pedir_int("Cantidad total de frames (24fps): ")
+
+nombre = input("NOMBRE ARCHIVO: ").strip() # nombre se guarda sin espacios?
 
 
+#a, b =  (1-p_ver), (1-p_hor
 # esto no a, b =  1/(1-p_hor) , 1/(1-p_ver)
 #a, b = (1-p_ver)/( p_ver+ p_hor), (1-p_hor)/( p_ver+ p_hor) # esto un poco para valores bajos de ps
 C = 1
@@ -60,7 +70,7 @@ print("Iniciando simulacion inicial!")
 while newen.N < N_inicial:
     # creamos una particula y esperamos a q muera
     if newen.N % 1000 == 0:
-        print(newen.N, "particulas en el cluster")
+        print(newen.N, "particulas en el cluster") # esto a veces no se imprime
     newen.crear_particula()
     while not newen.vacio and newen.N < N_inicial: 
         newen.actualizar()
@@ -73,7 +83,7 @@ if newen.vacio:
 
 #N = 100 # NADIE SABE PARA QUE ES ESTE N
 
-
+print("iniciande dibuje")
 # Crear figura y ejes centrados en el origen
 fig, ax = plt.subplots(figsize=(5, 5))
 ax.set_xlim(-100,100)
@@ -83,9 +93,9 @@ ax.axhline(0, color='gray', lw=1)
 ax.axvline(0, color='gray', lw=1)
 
 # Preparar visual
-ellipse = Ellipse((0, 0), width=2*a, height=2*b, fill=False, color='blue')
+ellipse = Ellipse((0, 0), width=2*a, height=2*b, fill=False, color='indigo')
 ax.add_patch(ellipse)
-cluster = ax.scatter(newen.mapa[:, 0], newen.mapa[:,1], s=20, color='red')
+cluster = ax.scatter(newen.mapa[:, 0], newen.mapa[:,1], s=20, color='teal')
 scat = ax.scatter(newen.particulas[:, 0], newen.particulas[:, 1], s=20, color='black', alpha=0.3)
 texto = ax.text(0.02, 0.98, '', transform=ax.transAxes, verticalalignment='top')
 
@@ -101,16 +111,21 @@ def update(frame):
     global newen # nuestra simulacion
     
     # Tamaño del cluster "|A(n)|"
-    N = newen.N
-    # Movemos hasta actualizar el cluster
-    while newen.N == N and not newen.vacio:
-        newen.actualizar() #ATENCION ESTO SE ROMPE CON P =! DE PYCLE 0
+    # Movemos hasta actualizar el cluster??
 
-    if newen.vacio:
-        newen.crear_particula()
+    N = newen.N
+    objetivo = N + pasos   
+
+    while newen.N < objetivo:
+        newen.actualizar() #ATENCION ESTO SE ROMPE CON P =! DE PYCLE 0
+        if newen.vacio:
+            newen.crear_particula()
+
+        
+    N = newen.N
 
     # Calcular tamaño del     
-    scale =  (np.pi/0.69)**0.5 * (newen.N / (np.pi* a*b))**0.5 
+    scale =  (np.pi/0.69)**0.5 * (N / (np.pi* a*b))**0.5 
 
 
     # Actualizar ovalo
@@ -127,12 +142,12 @@ def update(frame):
     return cluster, scat, texto, ellipse
 
 # Crear la animación
-ani = FuncAnimation(fig, update, interval=1, blit=True)
-
+ani = FuncAnimation(fig, update, frames, interval=10, blit=True)
 plt.show()
-
-
-
+from matplotlib.animation import PillowWriter
+print("guardando animatsion")
+ani.save(f"gifs\{nombre}.gif", writer=PillowWriter(fps=24))
+print("animatsion gualdada")
 
 
 

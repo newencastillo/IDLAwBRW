@@ -44,7 +44,7 @@ class BaseBRW:
         if self.p == 0:
             self.mover(i)
             return
-        if rd.random() < self.p: # Nos morimos
+        if rd.uniform(0.0, 1.0) < self.p: # Nos morimos
            self._particulas.pop(i) 
         else:               # else Nos duplicamos y nos movemos
             self._particulas.append(self._particulas[i].copy())

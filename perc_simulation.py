@@ -14,7 +14,7 @@ r_inicial = 3000 # NO ES UN RADIO
 
 """
 
-p_hor = 0.00001
+p_hor = 0.0
 
 
 p_ver = 0.
@@ -32,7 +32,7 @@ p = 0.0
 # esto no a, b =  1/(1-p_hor) , 1/(1-p_ver)
 #a, b = (1-p_ver)/( p_ver+ p_hor), (1-p_hor)/( p_ver+ p_hor) # esto un poco para valores bajos de ps
 C = 1
-a, b = C*(1-p_ver)/( p_ver+ p_hor), C*(1-p_hor)/( p_ver+ p_hor) 
+a, b = C*(1-p_ver)/( p_ver+ p_hor), C*(1-p_hor)/(p_ver+ p_hor) 
 
 
 '''Conjetura sobre como se comporta el crecimiento del cluster como una ellipse,'''
@@ -75,12 +75,6 @@ texto = ax.text(0.02, 0.98, '', transform=ax.transAxes, verticalalignment='top')
 """
 QUE se debe hacer, ? 😭
 TODO
- - dibujars un ovalo del tamaño de acuerdo al N y phor y pvert :]
- - buscar diferencia entre ovalo y elipse
- -optimizacion facil: no revisar percolacion cuando se esta dentro del cluster?
- - esto cambia resultados?
- - puede que si pe
-
 """
 
 # Función que actualiza el gráfico en cada frame

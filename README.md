@@ -4,10 +4,32 @@ Este proyecto implementa un modelo de **Internal Diffusion Limited Aggregation (
 
 ## 🧠 Descripción General
 
-$\int_a^b e^{\larrow \lambda \dot{newen}}$
+El concepto de DLA es el siguiente, particulas hacen caminata aleatoria hasta que "tocan" una estructura y luego se vuelven parte de ella, en el caso de Internal DLA, estas partículas se introducen al origen, caminan por un "cluster" hasta salir de él, momento en que "mueren" y pasan a ser parte del cluster.
 
-En el modelo clásico de IDLA, partículas parten desde el origen y realizan un random walk hasta adherirse a un cluster. 
-En esta versión extendida, se incorpora *branching*, permitiendo que ciertas partículas generen nuevas caminatas durante su evolución.
+Esto se puede interpretar como una grilla de "hoyos", donde vamos introduciendo pelotas que solo pueden caminar sobre los hoyos tapados, cuando se salen de esta "superficie tapada", tapan un hoyo.
+
+Introducimos una partícula al origen hasta que esta muera, momento en el que añadimos la siguiente y así sucesivamente, la pregunta que manejamos primeramente es ¿cómo crece este clúster?, ¿tiene forma regular?
+
+Esta pregunta fue respondida y demostrada en 1970~ por [REF] y la respuesta ( para cualquier dimensión) es LA bola! Resultados que se pueden observar:
+
+## BRanching random Walk 
+
+Nuestro primer objetivo fue replicar una cierta variación a este concepto propuesta por Silvestri etal [REF2]
+Alteramos la caminata aleatoria normal de esta simulación por BRW (Branching random walk). Esto es que nuestras partículas, ahora deciden con prob. $p$,  entre morir o duplicarse, con sus "hijas" cada una haciendo el siguiente paso del RW.
+
+El resultado que se expone y que pretendemos replicar, es que con esta dinámica, no se mantiene el comprotamiento asintótico sobre la forma de "la mancha", si no más bien que se forman "cototitos". lo que comprobamos rápidamente
+
+![](./animacion.gif)
+
+## Lo percolación (Parte 2)
+![](https://github.com/newencastillo/IDLAwBRW/blob/main/newen.gif)
+
+Cambiamos nuestro mundo, nuestro espacio donde esta ocurriendo esta recreación
+
+Se implementa una *percolación* sobre la malla de $\mathbb{Z}^2$, esto es, quitar aristas para restringir el movimiento posible de las partículas.
+La idea será eliminar aleatoriamente aristas en un campo finito (suficientemente grande para la simulación), con distintas probabilidades de eliminación para los "movimientos" verticales y los horizontales.
+
+Es de esperar que de esta forma, el "cluster" que se formará asintóticamente será una elipse, y sus parámetros que lo definen estarán relacionados con la elección de las probabilidades para las aristas horizontales y verticales
 
 El objetivo del proyecto es:
 - Explorar dinámicas de crecimiento en medios discretos.
@@ -16,36 +38,13 @@ El objetivo del proyecto es:
 
 ## ✅ Estado Actual
 
-### Primeros Resultados
-
-A continuación se presenta una pequeña tabla-registro de la cantidad de particulas necesarias para alcanzar un estado "supercritico" aproximado (cuando la población de partículas se sostiene a si misma), junto con la "probabilidad de apareamiento" para algunas simulaciones realizadas.
-
-
-| N | p |
-|---|---|
-| 19  | 0.90|
-| 23  | 0.90|
-| 14  | 0.85|
-| 12  | 0.85|
-| 14  | 0.85|
-| 9  | 0.80|
-| 9  | 0.80|
-| 5 | 0.80|
-
-**OJO** estos primeros resultados estan MALOS, la implementación no era correcta, ya que el branching no tenía implementada la probabilidad de "morir"
-
-
 - Implementación base en **Python**.
 - Simulación central de Random walk con posibilidad de branching.
-- Clase de BRW con restricción de IDLA
+- Clase de BRW 
+- + restricción de IDLA
+- + restricción de Percolationi
 - Simulación con animación
-
-# Parte 2
-
-Se implementará una *percolación* sobre la malla de $\mathbb{Z}^2$, esto es, quitar aristas para restringir el movimiento posible de las partículas.
-La idea será eliminar aleatoriamente aristas en un campo finito (suficientemente grande para la simulación), con distintas probabilidades de eliminación para los "movimientos" verticales y los horizontales.
-
-Es de esperar que de esta forma, el "cluster" que se formará asintóticamente será una elipse, y sus parámetros que lo definen estarán relacionados con la elección de las probabilidades para las aristas horizontales y verticales
+- + Herramienta para fabricar gifs
 
 
 
@@ -61,14 +60,14 @@ Queremos almacenar una gran cantidad de aristas, y que estas sean capaces de res
 
 *El problema fundamental*
 
-Que debo hacer para implementar el brw realmente!!!, -> google
-Ok, toca reimplementar el random wal, en CADA TIEMPO la particula se MUERE o se SEPARA ubicando a sus hijos en un lugar aleatorios
-Puede que no haya que modificar muchas cosas
+Solucionado e Implementado correctamente 😺
+solo falta quitarle flojera a la fn de crear percolacion y VALIDARLA
 
 Este readme fue creado (en parte) con inteligencia artificiel
 
 ## TODO s
 
-- Actualizar readme y borrar la copia
-- organizar bien el proyecto (onda hacer un __main__)
-- arreglar la wea del ovalo yaque chucha
+- Hacer la aprox montecarlo para los valores de a y b y ver como se comparan
+- hacer la presentación 
+- 
+- organizar bien el proyecto () (onda hacer un __main__)
