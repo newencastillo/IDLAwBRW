@@ -30,6 +30,8 @@ A continuación se presenta una pequeña tabla-registro de la cantidad de partic
 | 9  | 0.80|
 | 5 | 0.80|
 
+**OJO** estos primeros resultados estan MALOS, la implementación no era correcta, ya que el branching no tenía implementada la probabilidad de "morir"
+
 
 - Implementación base en **Python**.
 - Simulación central de Random walk con posibilidad de branching.
@@ -44,4 +46,27 @@ La idea será eliminar aleatoriamente aristas en un campo finito (suficientement
 Es de esperar que de esta forma, el "cluster" que se formará asintóticamente será una elipse, y sus parámetros que lo definen estarán relacionados con la elección de las probabilidades para las aristas horizontales y verticales
 
 
+
+### notas propias
+
+*Cómo implementar la percolación??*
+
+Nuestra malla de $\mathbb{Z}^2$ la interpretamos como un grafo, donde números son adyacentes si estan a una distancia de 1.
+Al querer implementar la percolación surgen entonces un par de problemas:
+
+Queremos almacenar una gran cantidad de aristas, y que estas sean capaces de restringir el movimiento de el movimiento aleatorio
+
+
+*El problema fundamental*
+
+Que debo hacer para implementar el brw realmente!!!, -> google
+Ok, toca reimplementar el random wal, en CADA TIEMPO la particula se MUERE o se SEPARA ubicando a sus hijos en un lugar aleatorios
+Puede que no haya que modificar muchas cosas
+
 Este readme fue creado (en parte) con inteligencia artificiel
+
+## TODO s
+
+- Actualizar readme y borrar la copia
+- organizar bien el proyecto (onda hacer un __main__)
+- arreglar la wea del ovalo yaque chucha

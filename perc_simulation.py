@@ -9,14 +9,15 @@ from matplotlib.patches import Ellipse
 
 
 # SETUP
-r_inicial = 3# NO ES UN RADIO
-
+r_inicial = 4000# NO ES UN RADIO
 """ Se usa para establecer una cantidad inicial de partículas antes de la animación
 
 """
-p_hor = 0.0
 
-p_ver = 0.4
+p_hor = 0.1
+
+
+p_ver = 0.6
 
 """ Probabilidades de descartar un camino horizontal o vertical en la percolacion"""
 
@@ -25,8 +26,15 @@ p = 0.0
 """ Probabilidad de aparearse 
 (no nos interesa esta parte en esta generación de momento)
 """
+#a, b =  (1-p_ver), (1-p_hor)
 
-a, b = 1-p_ver, 1-p_hor 
+
+# esto no a, b =  1/(1-p_hor) , 1/(1-p_ver)
+#a, b = (1-p_ver)/( p_ver+ p_hor), (1-p_hor)/( p_ver+ p_hor) # esto un poco para valores bajos de ps
+C = 1
+a, b = C*(1-p_ver)/( p_ver+ p_hor), C*(1-p_hor)/( p_ver+ p_hor) 
+
+
 '''Conjetura sobre como se comporta el crecimiento del cluster como una ellipse,'''
 
 
@@ -41,6 +49,7 @@ ax.axvline(0, color='gray', lw=1)
 # Datos iniciales
 newen = BRW.BRW_IDLA_PERC(p)
 newen.crear_perc(500, p_ver, p_hor)
+
 print("iniciando simulacion inicial!")
 for i in range(r_inicial-1): # por el pi...
     if i % 100 == 0:
@@ -85,10 +94,12 @@ def update(frame):
     while newen.N == N and not newen.vacio:
         newen.actualizar() #ATENCION ESTO SE ROMPE CON P =! DE PYCLE 0
 
-    newen.crear_particula()
+    if newen.vacio:
+        newen.crear_particula()
 
     # Calcular tamaño del     
-    scale = (N / a*b*3.14)**0.5
+    scale =  (np.pi/0.69)**0.5 * (newen.N / (np.pi* a*b))**0.5 
+
 
     # Actualizar ovalo
     ellipse.width = a*scale

@@ -23,19 +23,33 @@ class BaseBRW:
         self._particulas.append([x, y])
 
     def mover(self):
+        "Ecoge aleatoriamente una particula y la mueve"
         n = len(self._particulas)
         i = rd.randint(0, n-1)
         dx, dy = rd.choice([(-1, 0), (1, 0), (0, -1), (0, 1)])
         self._particulas[i][0] += dx
         self._particulas[i][1] += dy
 
+    def mover(self, i):
+        """Mueve aleatoriamente la i-esima particula"""
+        try:
+            dx, dy = rd.choice([(-1, 0), (1, 0), (0, -1), (0, 1)])
+            self._particulas[i][0] += dx
+            self._particulas[i][1] += dy
+        except: Exception("Se intenta mover una particula que no existe")
+
     def aparear(self): # Añadir la capacidad de morir!
         n = len(self._particulas)
         i = rd.randint(0, n-1)
+        if self.p == 0:
+            self.mover(i)
+            return
         if rd.random() < self.p: # Nos morimos
            self._particulas.pop(i) 
-        else:               # else Nos duplicamos
+        else:               # else Nos duplicamos y nos movemos
             self._particulas.append(self._particulas[i].copy())
+            self.mover(i)
+            self.mover(n) # ASi solo hay que modificar o implementar mover en las clases hijo
 
 
     # TODO IMplementar que mienstras mas particulas hay
@@ -43,11 +57,14 @@ class BaseBRW:
     def actualizar(self):
         if self.vacio:
             raise Exception("Se intenta actualizar un RW vacío") 
+        self.aparear()
+        
+        """
         self.mover()
         # Mover OR aparear es bueno porque 
         # las particulas se pueden morir con cualquiera de los dos
         if (not self.vacio) and rd.random() < self.p:
-            self.aparear()
+            self.aparear()"""
 
 
 class BRW(BaseBRW):
@@ -88,6 +105,19 @@ class BRW_IDLA(BaseBRW):
         else:
             self._particulas[i] = [x_new, y_new]
 
+    def mover(self, i):
+        """Mueve aleatoriamente la i-esima particula,
+        considera la restricción del cluster """
+        try:
+            dx, dy = rd.choice([(-1, 0), (1, 0), (0, -1), (0, 1)])
+            x_new = self._particulas[i][0] + dx
+            y_new = self._particulas[i][1] + dy
+            if [x_new, y_new] not in self._mapa:
+                self._mapa.append([x_new, y_new])
+                self._particulas.pop(i)
+            else:
+                self._particulas[i] = [x_new, y_new]
+        except: Exception("Se intenta mover una particula que no existe")
 
 
 class BRW_IDLA_PERC(BRW_IDLA):
@@ -98,12 +128,6 @@ class BRW_IDLA_PERC(BRW_IDLA):
 
     def crear_perc(self, N, pvert, phor):
         print("Generando Percolación")
-        # TODO: implementar grilla con percolación
-        # como podemos almacenar esto de forma eficiente?
-        # el checkeo no deberia ser direccional, tiene que ser de "conjunto", de pertenencia
-        # podemos hacer crear dos tuplas por cada arista 
-        # y hacer el checkeo tipo "direccional"
-        # Onda almacenar {[(1,2),(2,2)],[(2,2),(1,2)]} esto seria eliminar una sola arista
         
         # SOLUCION
         # almacenar arista nomas como {[(1,2),(2,2)]} pero implementar funcion que haga el chequeo como (uv in E) or (vu in E)
@@ -127,7 +151,7 @@ class BRW_IDLA_PERC(BRW_IDLA):
                     self.perc.add( ((i,j), (i+1,j)) )                
 
 
-        # self.validarpercolacion()
+        # self.validarpercolacion(🥱😪😴) NO QUIERO HACER ESTO Q LATAA
         pass
 
     def mover(self):
@@ -153,3 +177,30 @@ class BRW_IDLA_PERC(BRW_IDLA):
             else:
                 self._particulas[i] = [x_new, y_new]
             return
+        
+    def mover(self, i):
+        """Mueve aleatoriamente la i-esima particula,
+        considera la restricción del cluster
+         y de la percolación generada """
+        try:
+            x = self._particulas[i][0]
+            y = self._particulas[i][1]
+            while True:
+                # Proponemos movernos a un lugar
+                dx, dy = rd.choice([(-1, 0), (1, 0), (0, -1), (0, 1)])
+                x_new = x + dx
+                y_new = y + dy
+
+                # Vemos si este movimiento esta prohibido por la percolacion
+                if ((x_new,y_new), (x,y)) in self.perc or ((x,y), (x_new,y_new)) in self.perc: 
+                    continue
+                
+                # Si se permite el movimiento hacemos el movimiento estandar de IDLA
+                if [x_new, y_new] not in self._mapa:
+                    self._mapa.append([x_new, y_new])
+                    self._particulas.pop(i)
+                    
+                else:
+                    self._particulas[i] = [x_new, y_new]
+                return
+        except: Exception("Se intenta mover una particula que no existe")
