@@ -9,7 +9,7 @@ from matplotlib.patches import Ellipse
 
 
 # SETUP
-r_inicial = 3000 # NO ES UN RADIO
+r_inicial = 0 # NO ES UN RADIO
 """ Se usa para establecer una cantidad inicial de partículas antes de la animación
 
 """
@@ -17,7 +17,7 @@ r_inicial = 3000 # NO ES UN RADIO
 p_hor = 0.0
 
 
-p_ver = 0.
+p_ver = 0.1
 
 """ Probabilidades de descartar un camino horizontal o vertical en la percolacion"""
 

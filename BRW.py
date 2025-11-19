@@ -2,7 +2,7 @@ import random as rd
 import numpy as np
 
 class BaseBRW:
-    def __init__(self, p=0.8):
+    def __init__(self, p=0.5):
         self._particulas = []
         self.p = p
 
@@ -74,7 +74,7 @@ class BRW(BaseBRW):
 
 class BRW_IDLA(BaseBRW):
     """ Branching RW + IDLA """
-    def __init__(self, p=0.8):
+    def __init__(self, p=0.5):
         super().__init__(p)
         self._mapa = [[0, 0]]  # origen ocupado
 
@@ -122,13 +122,13 @@ class BRW_IDLA(BaseBRW):
 
 class BRW_IDLA_PERC(BRW_IDLA):
     """ Branching RW + IDLA + Percolación """
-    def __init__(self, p=0.8):
+    def __init__(self, p=0.5):
         super().__init__(p)
         self.perc = set()
 
     def crear_perc(self, N, pvert, phor):
         print("Generando Percolación")
-        
+        self.perc = set()
         # SOLUCION
         # almacenar arista nomas como {[(1,2),(2,2)]} pero implementar funcion que haga el chequeo como (uv in E) or (vu in E)
        
@@ -150,9 +150,64 @@ class BRW_IDLA_PERC(BRW_IDLA):
                 if rd.random() < pvert:
                     self.perc.add( ((i,j), (i+1,j)) )                
 
+        print("Validando percolacion ")
+        if not self.validar_percolacion(N): #esto esta loco
+            print("Percolacion inválida, reintentando...")
+            self.crear_perc(N, pvert, phor) #esto esta loco
 
-        # self.validarpercolacion(🥱😪😴) NO QUIERO HACER ESTO Q LATAA
         pass
+
+    def validar_percolacion(self, N):
+        """
+        Retorna True si es posible escapar desde (0,0)
+        a cualquier punto del borde [-N,N]^2 usando solo aristas NO bloqueadas.
+        Hecho con ia en base a la mi implementacion propia
+        """
+        
+        from collections import deque
+
+        # movimientos posibles: N, S, E, O
+        vecinos = [(1,0), (-1,0), (0,1), (0,-1)]
+
+        origen = (0,0)
+
+        # si por alguna razón el origen ya está fuera, trivial
+        if not (-N <= 0 <= N):
+            return False
+
+        visitado = set([origen])
+        q = deque([origen])
+
+        # función auxiliar para revisar si una arista está bloqueada
+        def arista_bloqueada(a, b):
+            return (a, b) in self.perc or (b, a) in self.perc
+
+        while q:
+            x, y = q.popleft()
+
+            # si está en el borde, escapamos
+            if x == -N or x == N or y == -N or y == N:
+                return True
+
+            # explorar vecinos
+            for dx, dy in vecinos:
+                nx, ny = x + dx, y + dy
+
+                # fuera del dominio: no interesa
+                if not (-N <= nx <= N and -N <= ny <= N):
+                    continue
+
+                # revisar si la arista está bloqueada
+                if arista_bloqueada((x,y), (nx,ny)):
+                    continue
+
+                # BFS normal
+                if (nx, ny) not in visitado:
+                    visitado.add((nx,ny))
+                    q.append((nx,ny))
+
+        # si terminamos de explorar sin llegar al borde, no se puede escapar
+        return False
 
     def mover(self):
         '''Fuerza un movimiento válido '''

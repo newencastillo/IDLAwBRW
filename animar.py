@@ -97,7 +97,7 @@ ax.axvline(0, color='gray', lw=1)
 # Preparar visual
 ellipse = Ellipse((0, 0), width=2*a, height=2*b, fill=False, color='indigo')
 ax.add_patch(ellipse)
-scat = ax.scatter(newen.particulas[:, 0], newen.particulas[:, 1], s=20, color='black', alpha=0.3, zorder=2)
+scat = ax.scatter(newen.particulas[:, 0], newen.particulas[:, 1], s=20, color='black', zorder=2) # alpha = 0.3
 cluster = ax.scatter(newen.mapa[:, 0], newen.mapa[:,1], s=20, color='teal', zorder= 1)
 texto = ax.text(0.02, 0.98, '', transform=ax.transAxes, verticalalignment='top', zorder=10)
 
@@ -170,16 +170,16 @@ def update2(frame):
     x, y = zip(*newen.particulas)
     cluster.set_offsets(np.c_[newen.mapa[:,0], newen.mapa[:,1]])
     scat.set_offsets(np.c_[x, y])
-    texto.set_text(f'Tamaño cluster: {N}\n $p$ branch = {p}\n($p_h$,  $p_v$) : ({p_ver}, {p_hor})\nPartículas activas: {len(newen.particulas)}')
+    texto.set_text(f'Tamaño cluster: {N}\n ')#$p$ branch = {p}\n($p_h$,  $p_v$) : ({p_ver}, {p_hor})\nPartículas activas: {len(newen.particulas)}')
 
-    return scat, cluster, texto#, ellipse
+    return scat, cluster#, texto#, ellipse
 
 # Crear la animación
-ani = FuncAnimation(fig, update2, frames, interval=10, blit=True)
+ani = FuncAnimation(fig, update, frames, interval=10, blit=True)
 plt.show()
 from matplotlib.animation import PillowWriter
 print("guardando animatsion")
-#ani.save(f"gifs\{nombre}.gif", writer=PillowWriter(fps=FPS))
+#ani.save(f"gifs/{nombre}.gif", writer=PillowWriter(fps=FPS))
 print("animatsion gualdada")
 
 
