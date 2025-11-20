@@ -55,6 +55,7 @@ class BaseBRW:
     # TODO IMplementar que mienstras mas particulas hay
     # más probable es que se aparear()
     def actualizar(self):
+        """Actualiza el moviemiento de una particula"""
         if self.vacio:
             raise Exception("Se intenta actualizar un RW vacío") 
         self.aparear()
@@ -65,6 +66,8 @@ class BaseBRW:
         # las particulas se pueden morir con cualquiera de los dos
         if (not self.vacio) and rd.random() < self.p:
             self.aparear()"""
+        
+
 
 
 class BRW(BaseBRW):
@@ -118,6 +121,27 @@ class BRW_IDLA(BaseBRW):
             else:
                 self._particulas[i] = [x_new, y_new]
         except: Exception("Se intenta mover una particula que no existe")
+        
+    def obtener_parametros(self):
+        """Retorna una aproximación de los parámetros a y b
+        correspondientes a la anchura y altura "radial" del cluster"""
+        #Parametros
+        Aizq = 0
+        Ader = 0
+        Bup = 0
+        Bdown = 0
+        for u in self.mapa:
+            if u[0] < Aizq: # Coordenada x?
+                Aizq = u[0] 
+            if u[0] > Ader:
+                Ader = u[0]
+            if u[1] < Bdown: # Coordenada y ?!
+                Bdown = u[1]
+            if u[1] > Bup:
+                Bup = u[1]
+
+        return (abs(Aizq) + abs(Ader))/2, (abs(Bup) + abs(Bdown))/2
+
 
 
 class BRW_IDLA_PERC(BRW_IDLA):
@@ -127,6 +151,10 @@ class BRW_IDLA_PERC(BRW_IDLA):
         self.perc = set()
 
     def crear_perc(self, N, pvert, phor):
+        """Crea una perecolación de tmaño 2Nx2N CUIDADO
+        forzará la creación de una perc. VÁLIDA. iterará hasta conseguirla
+        parámetros altos de prob. de descarte puede hacer que itere por siempre (c.s)
+        """
         print("Generando Percolación")
         self.perc = set()
         # SOLUCION

@@ -8,13 +8,13 @@ from matplotlib.animation import FuncAnimation
 
 
 # SETUP
-r_inicial = 10# 
+r_inicial = 3000# 
 """ Se usa para establecer una cantidad inicial de partículas antes de la animación
 CONTROLARSE: ESTO NO REPRESENTA PARA NADA NINGUN TIPO DE RADIO DEL CLUSTER
 ES LA CANTIDAD DE PARTICULAS CON LAS QUE SE INICIA LA SIMULACION (SE SUELTAN DE A UNA)
 R GRANDE -> SE PUEDE ALCANZAR ESTADO SUPER-CRITICO Y LA ANIMACIÓN NUNCA PARTE"""
 
-p = 0.5
+p = 0.0
 
 """ Probabilidad de aparearse (Implementado como una una bernoulli en cada dt de la simulacion)
 igual es como mitosis pero waterer"""
@@ -30,8 +30,9 @@ ax.axvline(0, color='gray', lw=1)
 
 # Datos iniciales
 newen = BRW.BRW_IDLA_PERC(p)
-newen.crear_perc(100,0.0,0.0)
+newen.crear_perc(100,0.5,0.0)
 print("Perc generada, inciando r inicial")
+
 for i in range(r_inicial-1): # por el pi...
 
     newen.crear_particula()
@@ -73,7 +74,7 @@ def update(frame): # falta trabajar bastante esta parte
     x, y = zip(*newen.particulas)
     cluster.set_offsets(np.c_[newen.mapa[:,0], newen.mapa[:,1]])
     scat.set_offsets(np.c_[x, y])
-    texto.set_text(f'Partículas activas: {len(newen.particulas)}')
+    texto.set_text(f'Partículas activas: {len(newen.particulas)}\n(a, b) = {newen.obtener_parametros()}')
 
     return cluster, scat, texto
 
