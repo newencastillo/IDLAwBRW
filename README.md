@@ -8,9 +8,14 @@ El concepto de DLA es el siguiente, particulas hacen caminata aleatoria hasta qu
 
 Esto se puede interpretar como una grilla de "hoyos", donde vamos introduciendo pelotas que solo pueden caminar sobre los hoyos tapados, cuando se salen de esta "superficie tapada", tapan un hoyo.
 
+![](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/IDLA.gif)
+
 Introducimos una partícula al origen hasta que esta muera, momento en el que añadimos la siguiente y así sucesivamente, la pregunta que manejamos primeramente es ¿cómo crece este clúster?, ¿tiene forma regular?
 
 Esta pregunta fue respondida y demostrada en 1970~ por [REF] y la respuesta ( para cualquier dimensión) es LA bola! Resultados que se pueden observar:
+
+
+![](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/ComoBola.gif)
 
 ## BRanching random Walk 
 
@@ -19,10 +24,15 @@ Alteramos la caminata aleatoria normal de esta simulación por BRW (Branching ra
 
 El resultado que se expone y que pretendemos replicar, es que con esta dinámica, no se mantiene el comprotamiento asintótico sobre la forma de "la mancha", si no más bien que se forman "cototitos". lo que comprobamos rápidamente
 
-![](./animacion.gif)
+![](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/BigCrit.gif)
+
+Lo interesante es que esto se cumple solo para el caso crítico, con $p = 1/2$, con valores mas bajos, o más altos, se vuelve a obtener el resultado del crecimiento asintótico, considerando que estas simulaciones son además muy costosas, cuando muerern mucho, la bola ya "no crece" desde cierto punto (mentira), cuando se duplican mucho, la cantidad de particulas explota, dificultando el cálculo.
+
+![](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/SubCrit.gif)
+![](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/Crit.gif)
+![](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/SuperCrit.gif)
 
 ## Lo percolación (Parte 2)
-![](https://github.com/newencastillo/IDLAwBRW/blob/main/newen.gif)
 
 Cambiamos nuestro mundo, nuestro espacio donde esta ocurriendo esta recreación
 
@@ -31,10 +41,26 @@ La idea será eliminar aleatoriamente aristas en un campo finito (suficientement
 
 Es de esperar que de esta forma, el "cluster" que se formará asintóticamente será una elipse, y sus parámetros que lo definen estarán relacionados con la elección de las probabilidades para las aristas horizontales y verticales
 
+![](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/4000NoBranchPercBueno.gif)
+
+![](https://github.com/newencastillo/IDLAwBRW/blob/main/newen.gif)
+
+
+Queremos poner a prueba que sucede con el branching => Comportamiento esperado
+![](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/3000BranchingPerc.gif)
+
+Trabajando en esto nos dimos cuenta de dos cosas:
+  1. Acercar el valor de $p_v + p_h$ a 1 produce resultados ¿inesperados?
+    
+    ![Percototos](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/PercototosBolaLight.gif)
+
+  2. CUALES SON LOS PARÁMETROS A Y B
+     
+     A esto se le dedicó un buen tiempo computacional
+
 El objetivo del proyecto es:
-- Explorar dinámicas de crecimiento en medios discretos.
 - Analizar la estructura del cluster resultante.
-- Experimentar con tasas de ramificación, tamaños de grilla y condiciones de ocupación.
+
 
 ## ✅ Estado Actual
 
@@ -60,10 +86,11 @@ Queremos almacenar una gran cantidad de aristas, y que estas sean capaces de res
 
 *El problema fundamental*
 
-Solucionado e Implementado correctamente 😺
-solo falta quitarle flojera a la fn de crear percolacion y VALIDARLA
+Ya no hay problema fundamental
 
-Este readme fue creado (en parte) con inteligencia artificiel
+Este readme  NO fue creado (en parte) con inteligencia artificiel
+usos de ia: la primera version del readme que ya casi ni existe y la funcion validar percolacion pq que lata y las maquetas para hacer las animaciones de matplot.
+
 
 ## TODO s
 

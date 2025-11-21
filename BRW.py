@@ -139,8 +139,11 @@ class BRW_IDLA(BaseBRW):
                 Bdown = u[1]
             if u[1] > Bup:
                 Bup = u[1]
-
-        return (abs(Aizq) + abs(Ader))/2, (abs(Bup) + abs(Bdown))/2
+        A = (abs(Aizq) + abs(Ader))/2
+        B = (abs(Bup) + abs(Bdown))/2
+        # N = \pi * a * b * S^2
+        # a = N / (\pi * b * S^2)
+        return A, B
 
 
 

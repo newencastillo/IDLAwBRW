@@ -5,6 +5,7 @@ import BRW
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import pandas as pd
 
 """Idea 1: si los parametros a y b de la elipse son un factor que se escala
@@ -17,7 +18,7 @@ def generar_resultados():
 
     for N in [1000, 2000, 3000, 4000]:
         for p_hor in [0.2, 0.3, 0.4, 0.5, 0.6]:
-            for p_ver in np.linspace(0,0.8-p_hor,4):
+            for p_ver in np.linspace(0,0.9-p_hor,4):
                 newen = BRW.BRW_IDLA_PERC(0.0) # Creamos un idla con percolacion SIN BRANCHING
                 newen.crear_perc(100, p_ver, p_hor)
 
@@ -81,38 +82,81 @@ def segundomain():
     plt.show()
 
 def tercermain():
-    # Leer CSV
+   
+    
+    # ============================
+    # 1) Tu función S_teórica
+    # ============================
+    def S_teorica(ph, pv):
+        # EJEMPLO: tú cambias esta función
+        # Supongamos S depende linealmente:
+        #return (1-ph)*(1-pv)/(pv+ph)**2
+        #return 0.5+(1-ph)*(1-pv) # Masomenos pero muy abajo le falta algo como un + C ( no tiene sentido?)
+        #return np.exp(-(ph**2 +pv**2)) #masmenos, bueno igual peroinexplicable
+        return (pv+ph)**2/((1-pv)*(1-ph)) # Proporcional al utilizado
+        
+        return 2*(pv+ph)**2/(ph*pv-1)
+        # Cámbiala por tu fórmula experimental
+
+
+    # ============================
+    # 2) Cargar datos
+    # ============================
     df = pd.read_csv("resultados.csv")
 
-    # Crear figura 3D
-    fig = plt.figure(figsize=(10,8))
+    p_hor_vals = df["p_hor"].values
+    p_ver_vals = df["p_ver"].values
+    S_exp = df["S"].values
+
+
+    # ============================
+    # 3) Calcular S_teo y distancia cuadrada total
+    # ============================
+    S_teo = S_teorica(p_hor_vals, p_ver_vals)
+    dist2_total = np.sum((S_exp - S_teo)**2)
+
+    print("Distancia cuadrada total:")
+    print(dist2_total)
+
+
+    # ============================
+    # 4) Graficar resultados en 3D
+    # ============================
+    fig = plt.figure(figsize=(11,8))
     ax = fig.add_subplot(111, projection='3d')
 
-    # Scatter 3D
+    # Puntos experimentales
     p = ax.scatter(
-        df["p_hor"],
-        df["p_ver"],
-        df["S"],
-        c=df["N"],     # color según N
+        p_hor_vals,
+        p_ver_vals,
+        S_exp,
+        c=df["N"],
         cmap="viridis",
-        s=60
+        s=60,
+        label="Datos simulados"
     )
 
-    # Barra de colores
-    cbar = plt.colorbar(p, ax=ax)
-    cbar.set_label("N")
+    # Superficie teórica (wireframe)
+    ph = np.linspace(min(p_hor_vals), max(p_hor_vals), 30)
+    pv = np.linspace(min(p_ver_vals), max(p_ver_vals), 30)
+    PH, PV = np.meshgrid(ph, pv)
+    Ssurf = S_teorica(PH, PV)
+
+    ax.plot_wireframe(PH, PV, Ssurf, color="red", linewidth=1, label="S_teórica")
 
     # Etiquetas
     ax.set_xlabel("p_hor")
     ax.set_ylabel("p_ver")
     ax.set_zlabel("S")
-    ax.set_title("Superficie S según p_hor, p_ver y N (color)")
+    ax.set_title(f"Comparación datos vs función teórica\nDist^2 total = {dist2_total:.3f}")
 
+    # Leyenda + barra de color
+    plt.colorbar(p, ax=ax, label="N")
     plt.tight_layout()
     plt.show()
 
 
     pass
 if __name__ == '__main__':
-    main()
+    #main()
     tercermain()
