@@ -3,7 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import time
-
+""" DEPRECATED, archivo principal: BRW
+Herramienta de animacion: animar.py"""
 # VAARIABLES
 p = 0.4
 lamba = 10

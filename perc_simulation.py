@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.patches import Ellipse
 
-
+""" DEPRECATED, archivo principal: BRW
+Herramienta de animacion: animar.py"""
 
 
 # SETUP

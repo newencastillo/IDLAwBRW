@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
+""" DEPRECATED, archivo principal (LIBRERIA): BRW
+Herramienta de animacion: animar.py"""
 
 
 

@@ -98,7 +98,7 @@ ax.axvline(0, color='gray', lw=1)
 ellipse = Ellipse((0, 0), width=2*a, height=2*b, fill=False, color='indigo')
 ax.add_patch(ellipse)
 scat = ax.scatter(newen.particulas[:, 0], newen.particulas[:, 1], s=20, color='black', zorder=2, alpha = 0.5)
-cluster = ax.scatter(newen.mapa[:, 0], newen.mapa[:,1], s=20, color='steelblue', zorder= -1)
+cluster = ax.scatter(newen.mapa[:, 0], newen.mapa[:,1], s=20, color='darkviolet', zorder= -1)
 texto = ax.text(0.02, 0.98, '', transform=ax.transAxes, verticalalignment='top', zorder=10)
 
 """
@@ -114,7 +114,7 @@ def update(frame):
 
     global newen # nuestra simulacion
     
-    # Tamaño del cluster "|A(n)|"
+    # Tamaño del cluster "|A(n)|"   
     # Movemos hasta actualizar el cluster??
 
     N = newen.N

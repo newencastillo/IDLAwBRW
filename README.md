@@ -60,15 +60,17 @@ Trabajando en esto nos dimos cuenta de dos cosas:
 
 ![Percototos](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/PercototosBola.gif)
 
-  1. CUALES SON LOS PARÁMETROS A Y B
+![Percototos3](https://github.com/newencastillo/IDLAwBRW/blob/main/5000%20no%20branch.png)
+
+  1. CUÁLES SON LOS PARÁMETROS A Y B
      
      A esto se le dedicó un buen tiempo computacional, se implementó un algoritmo tipo montecarlo para encontrar el factor de "escala" del óvalo como elipse, calculando los valores de a y b de varias simulaciones.
 
-     $A = \pi a b = \pi (a*S)(b*S) \rArr S \approx \sqrt{\frac{N}{\pi ab}}$
+$$A = \pi a b = \pi (a*S)(b*S) \Rightarrow S \approx \sqrt{\frac{N}{\pi ab}}$$
 
-     El encontrar una funcion que aproxime bien este factor de escala, dependiendo de $p_v$ y $p_h$ probó ser un verdadero desafío, tanto por la forma de la función, como un posible factor de escala que la acompañe.
+  El encontrar una funcion que aproxime bien este factor de escala, dependiendo de $p_v$ y $p_h$ probó ser un verdadero desafío, tanto por la forma de la función, como un posible factor de escala que la acompañe.
 
-     Nuestro mejor resultado es el utilizado para dibujar los elipses en las simulaciones y es $a \aproxx \frac{1-p_v}{p_v+p_h}$, que no funciona tan bien para elipses muy "estiradas", en verdad sigue siendo muy bueno
+  Nuestro mejor resultado es el utilizado para dibujar los elipses en las simulaciones y es $a \aprox \frac{1-p_v}{p_v+p_h}$, que no funciona tan bien para elipses muy "estiradas", en verdad sigue siendo muy bueno
 
   
 ![Ovalo](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/OvaloMalo.gif)
@@ -80,22 +82,14 @@ Trabajando en esto nos dimos cuenta de dos cosas:
 - Implementación base en **Python**.
 - Simulación central de Random walk con posibilidad de branching.
 - Clase de BRW 
-- + restricción de IDLA
-- + restricción de Percolationi
+  + restricción de IDLA
+  + restricción de Percolationi
 - Simulación con animación
-- + Herramienta para fabricar gifs
+  + Herramienta para fabricar gifs
 
 
 
 ### notas propias
-
-*Cómo implementar la percolación??*
-
-Nuestra malla de $\mathbb{Z}^2$ la interpretamos como un grafo, donde números son adyacentes si estan a una distancia de 1.
-Al querer implementar la percolación surgen entonces un par de problemas:
-
-Queremos almacenar una gran cantidad de aristas, y que estas sean capaces de restringir el movimiento de el movimiento aleatorio
-
 
 *El problema fundamental*
 
@@ -107,7 +101,4 @@ usos de ia: la primera version del readme que ya casi ni existe y la funcion val
 
 ## TODO s
 
-- Hacer la aprox montecarlo para los valores de a y b y ver como se comparan
-- hacer la presentación 
-- 
 - organizar bien el proyecto () (onda hacer un __main__)
