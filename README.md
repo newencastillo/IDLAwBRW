@@ -8,25 +8,27 @@ El concepto de DLA es el siguiente, particulas hacen caminata aleatoria hasta qu
 
 Esto se puede interpretar como una grilla de "hoyos", donde vamos introduciendo pelotas que solo pueden caminar sobre los hoyos tapados, cuando se salen de esta "superficie tapada", tapan un hoyo.
 
-![](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/IDLA.gif)
+![Que es Idla](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/IDLA.gif)
 
 Introducimos una partícula al origen hasta que esta muera, momento en el que añadimos la siguiente y así sucesivamente, la pregunta que manejamos primeramente es ¿cómo crece este clúster?, ¿tiene forma regular?
 
 Esta pregunta fue respondida y demostrada en 1970~ por [REF] y la respuesta ( para cualquier dimensión) es LA bola! Resultados que se pueden observar:
 
 
-![](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/ComoBola.gif)
+![Crece como Bola](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/ComoBola.gif)
 
 ## BRanching random Walk 
 
 Nuestro primer objetivo fue replicar una cierta variación a este concepto propuesta por Silvestri etal [REF2]
 Alteramos la caminata aleatoria normal de esta simulación por BRW (Branching random walk). Esto es que nuestras partículas, ahora deciden con prob. $p$,  entre morir o duplicarse, con sus "hijas" cada una haciendo el siguiente paso del RW.
 
-El resultado que se expone y que pretendemos replicar, es que con esta dinámica, no se mantiene el comprotamiento asintótico sobre la forma de "la mancha", si no más bien que se forman "cototitos". lo que comprobamos rápidamente
+![Que es BRW](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/Branching1.gif)
 
-![](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/BigCrit.gif)
+El resultado que se expone y que pretendemos replicar, es que con esta dinámica, no se mantiene el comprotamiento asintótico sobre la forma de "la mancha", si no más bien que se forman "cototitos". lo que comprobamos rápidamente:
 
-Lo interesante es que esto se cumple solo para el caso crítico, con $p = 1/2$, con valores mas bajos, o más altos, se vuelve a obtener el resultado del crecimiento asintótico, considerando que estas simulaciones son además muy costosas, cuando muerern mucho, la bola ya "no crece" desde cierto punto (mentira), cuando se duplican mucho, la cantidad de particulas explota, dificultando el cálculo.
+![COTOTOS](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/BigCrit.gif)
+
+Lo interesante es que esto se cumple solo para el caso crítico, con $p = 1/2$, con valores mas bajos, o más altos, se vuelve a obtener el resultado del crecimiento asintótico, considerando que estas simulaciones son además muy costosas; cuando muerern mucho, la bola ya "no crece" desde cierto N (mentira), cuando se duplican mucho, la cantidad de particulas explota muy rápido, dificultando la simulación.
 
 ![](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/SubCrit.gif)
 ![](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/Crit.gif)
@@ -41,25 +43,36 @@ La idea será eliminar aleatoriamente aristas en un campo finito (suficientement
 
 Es de esperar que de esta forma, el "cluster" que se formará asintóticamente será una elipse, y sus parámetros que lo definen estarán relacionados con la elección de las probabilidades para las aristas horizontales y verticales
 
-![](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/4000NoBranchPercBueno.gif)
+![Obalo](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/PercOvalo.gif)
 
-![](https://github.com/newencastillo/IDLAwBRW/blob/main/newen.gif)
 
 
 Queremos poner a prueba que sucede con el branching => Comportamiento esperado
 ![](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/3000BranchingPerc.gif)
+![](https://github.com/newencastillo/IDLAwBRW/blob/main/newen.gif)
 
 Trabajando en esto nos dimos cuenta de dos cosas:
   1. Acercar el valor de $p_v + p_h$ a 1 produce resultados ¿inesperados?
+
+  **PERCOTOTOS:**
     
-    ![Percototos](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/PercototosBolaLight.gif)
+![Percototos](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/PercototosBolaLight.gif)
 
-  2. CUALES SON LOS PARÁMETROS A Y B
+![Percototos](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/PercototosBola.gif)
+
+  1. CUALES SON LOS PARÁMETROS A Y B
      
-     A esto se le dedicó un buen tiempo computacional
+     A esto se le dedicó un buen tiempo computacional, se implementó un algoritmo tipo montecarlo para encontrar el factor de "escala" del óvalo como elipse, calculando los valores de a y b de varias simulaciones.
 
-El objetivo del proyecto es:
-- Analizar la estructura del cluster resultante.
+     $A = \pi a b = \pi (a*S)(b*S) \rArr S \approx \sqrt{\frac{N}{\pi ab}}$
+
+     El encontrar una funcion que aproxime bien este factor de escala, dependiendo de $p_v$ y $p_h$ probó ser un verdadero desafío, tanto por la forma de la función, como un posible factor de escala que la acompañe.
+
+     Nuestro mejor resultado es el utilizado para dibujar los elipses en las simulaciones y es $a \aproxx \frac{1-p_v}{p_v+p_h}$, que no funciona tan bien para elipses muy "estiradas", en verdad sigue siendo muy bueno
+
+  
+![Ovalo](https://github.com/newencastillo/IDLAwBRW/blob/main/gifs/OvaloMalo.gif)
+
 
 
 ## ✅ Estado Actual

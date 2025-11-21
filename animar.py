@@ -96,9 +96,9 @@ ax.axvline(0, color='gray', lw=1)
 
 # Preparar visual
 ellipse = Ellipse((0, 0), width=2*a, height=2*b, fill=False, color='indigo')
-ax.add_patch(ellipse, zorder=1)
-scat = ax.scatter(newen.particulas[:, 0], newen.particulas[:, 1], s=20, color='black', zorder=2, alpha = 0.3)
-cluster = ax.scatter(newen.mapa[:, 0], newen.mapa[:,1], s=20, color='crimson', zorder= -1)
+ax.add_patch(ellipse)
+scat = ax.scatter(newen.particulas[:, 0], newen.particulas[:, 1], s=20, color='black', zorder=2, alpha = 0.5)
+cluster = ax.scatter(newen.mapa[:, 0], newen.mapa[:,1], s=20, color='steelblue', zorder= -1)
 texto = ax.text(0.02, 0.98, '', transform=ax.transAxes, verticalalignment='top', zorder=10)
 
 """
